@@ -50,7 +50,7 @@ class App extends Component {
       <Container className="App">
         <Row>
           <Col>
-            <h1 style={{margin: "20px 0"}}>CRUD Database</h1>
+            <h1 style={{margin: "20px 0"}}>Car Repairs</h1>
           </Col>
         </Row>
         <Row>
