@@ -53,7 +53,8 @@ app.use(morgan('combined')) // use 'tiny' or 'combined'
 
 // App Routes - Auth
 app.get('/', (req, res) => res.send('server: OK'))
-app.get('/crud', (req, res) => main.getTableData(req, res, db))
+app.get('/crud', (req, res)     => main.getTableData(req, res, db))
+app.get('/crud/:id', (req, res) => main.queryById(req, res, db))
 app.post('/crud', (req, res) => main.postTableData(req, res, db))
 app.put('/crud', (req, res) => main.putTableData(req, res, db))
 app.delete('/crud', (req, res) => main.deleteTableData(req, res, db))
