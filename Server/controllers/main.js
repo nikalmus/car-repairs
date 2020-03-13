@@ -1,6 +1,18 @@
-  const getTableData = (req, res, db) => {
-    console.log("OK, got it")
-    db.select('*').from('repair')
+/*   const getTableData = (req, res, db) => {
+    if (req.query){
+      db.select('*').from('repair').where(req.query)
+      .then(items => {
+        if(items.length){
+          console.log(`found ${items.length} items`)
+          res.json(items)
+        } else {
+          res.json({dataExists: 'false'})
+        }
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+    }
+    else{
+      db.select('*').from('repair')
       .then(items => {
         if(items.length){
           res.json(items)
@@ -9,12 +21,53 @@
         }
       })
       .catch(err => res.status(400).json({dbError: 'db error'}))
+    }
+  } */
+
+  const getTableData = (req, res, db) => {
+    db.select('*').from('repair')
+      .modify(function(queryBuilder){
+        console.log(req.query)
+        if (Object.keys(req.query).length > 0) {
+          console.log("query params exist")
+          console.log(req.query)
+          let k = ''
+          let val = ''
+          for (const key in req.query) {
+            k = key
+            val = req.query[key]
+            console.log(`val: ${val}, key: ${k}`)
+          }
+          queryBuilder.where(k, val);
+        } 
+      }).then(items => {
+        console.log("outside of if")
+          if(items.length){
+            console.log(`found ${items.length} items`)
+            res.json(items)
+          } else {
+            res.json({dataExists: 'false'})
+         }
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
   }
 
   const queryById = (req, res, db) => {
     id = req.params.id
-    console.log(`id: ${id}`)
     db.select('*').from('repair').where({id:id})
+      .then(items => {
+        if(items.length){
+          console.log(`found ${items.length} items`)
+          res.json(items)
+        } else {
+          res.json({dataExists: 'false'})
+        }
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+  }
+
+  const queryByField = (req, res, db) => {
+    db.select('*').from('repair').where(req.query)
       .then(items => {
         if(items.length){
           console.log(`found ${items.length} items`)
