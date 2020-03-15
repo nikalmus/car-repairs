@@ -3,7 +3,6 @@
   const getTableData = (req, res, db) => {
     db.select('*').from('repair')
       .modify(function(queryBuilder){
-        console.log('req.query before if:', req.query)
         if (Object.keys(req.query).length > 0) {
           const keys = Object.keys(req.query)
           const k = keys[0]
@@ -17,9 +16,15 @@
           } else {
             const re2 = /(?<left>\w+)(?<operator>>|<)(?<right>\d+)/ //<--- regex that matches gt; and lt; signs
             const result2 = re2.exec(k)
+            const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/
+            const result3 = re3.exec(k)
+            console.log('result3', result3)
             if(result2){
               queryBuilder.where(result2.groups.left, result2.groups.operator, result2.groups.right)
-            } else {   //<--- default when query param is used with '=', e.g. 'price=0'
+            } else if(result3){
+              console.log(result3.groups.right) 
+              queryBuilder.where(result3.groups.left, 'ilike', `%${result3.groups.right.trim()}%`)
+            }else {   //<--- default when query param is used with '=', e.g. 'price=0'
               const val = req.query[k]
               queryBuilder.where(k, val);
             }
