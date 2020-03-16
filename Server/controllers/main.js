@@ -16,7 +16,7 @@
           } else {
             const re2 = /(?<left>\w+)(?<operator>>|<)(?<right>\d+)/ //<--- regex that matches gt; and lt; signs
             const result2 = re2.exec(k)
-            const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/
+            const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/ //<--- regex for contains operator
             const result3 = re3.exec(k)
             console.log('result3', result3)
             if(result2){
@@ -31,7 +31,6 @@
           }
         } 
       }).then(items => {
-        console.log("outside of if")
           if(items.length){
             console.log(`found ${items.length} items`)
             res.json(items)

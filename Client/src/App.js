@@ -37,6 +37,10 @@ class App extends Component {
     this.setState({ items: newArray })
   }
 
+  filterState = (queryResults) => {
+    this.setState({ items: queryResults })
+  }
+
   deleteItemFromState = (id) => {
     const updatedItems = this.state.items.filter(item => item.id !== id)
     this.setState({ items: updatedItems })
@@ -55,7 +59,7 @@ class App extends Component {
           </Col>
         </Row>
         <Row>
-          <SearchForm />
+          <SearchForm items={this.state.items} filterState={this.filterState}/>
         </Row>
         <Row>
           <Col>
