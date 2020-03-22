@@ -11,7 +11,6 @@
           if(result && req.query[k]){
             const left = k.slice(0,-1)
             const operator = k.charAt(k.length-1) + '='
-            console.log('k', k, 'operator', operator)
             const right = req.query[k]
             queryBuilder.where(left, operator, right)
           } else {
@@ -22,21 +21,13 @@
             const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/ //<--- regex for contains operator
             const result3 = re3.exec(k)
             if (resultDate){
-              console.log('------------Date query')
-              console.log('resultDate.groups.right: ', resultDate.groups.right)
               queryBuilder.where(resultDate.groups.left, resultDate.groups.operator.trim(), resultDate.groups.right)
             } else if(result2){
-              console.log('------------3')
-              console.log('result2.groups.right: ', result2.groups.right)
               queryBuilder.where(result2.groups.left, result2.groups.operator.trim(), result2.groups.right)
             } else if(result3){
-              console.log(result3.groups.right) 
               queryBuilder.where(result3.groups.left, 'ilike', `%${result3.groups.right.trim()}%`)
             }else {   //<--- default when query param is used with '=', e.g. 'price=0'
-              console.log('--------4')
-              console.log('req.query', req.query)
               const val = req.query[k]
-              console.log('val', val)
               queryBuilder.where(k, val.trim());
             }
           }
