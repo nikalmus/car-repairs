@@ -6,7 +6,16 @@
         if (Object.keys(req.query).length > 0) {
           const keys = Object.keys(req.query)
           const k = keys[0]
-          const re = /(?<left>\w+\s?<|>\s?)/ //<--- regex that identifies 'price<' type of pattern caused by gte; and lte; signs
+          console.log(`|${k}|`)
+          /*
+          regex that identifies 'price<' or 'price>' type of pattern caused by '<=' or '>=' signs.
+          '=' is being immediately used as equal sign of query parameter, leaving '<' and '>' 
+          as part of whaterver is on the left of the operator. 
+          To workaround it, I slice the last character of the "left" group (that would be '<' or '>'),
+          add '=' to it (that's operator group), and relied on javascript to set "right" gropu to what 
+          was on the right of '=' sign, which is req.query[k]
+          */
+          const re = /(?<left>\w+\s*<|>\s*)/ 
           const result = re.exec(k)
           if(result && req.query[k]){
             const left = k.slice(0,-1)
@@ -14,18 +23,23 @@
             const right = req.query[k]
             queryBuilder.where(left, operator, right)
           } else {
-            const reDate = /(?<left>\w+\s?)(?<operator>>|<|\s?)(?<right>\s?\d{4}-\d{2}-\d{2})/
+            //regex that identifies 'date>2019-01-01' or 'date<2019-01-01' pattern
+            const reDate = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?\d{4}-\d{2}-\d{2})/
             const resultDate = reDate.exec(k)
-            const re2 = /(?<left>\w+\s?)(?<operator>>|<|\s?)(?<right>\s?\d+.?\d{2}?)/ //<--- regex that matches gt; and lt; signs
-            const result2 = re2.exec(k)
-            const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/ //<--- regex for contains operator
-            const result3 = re3.exec(k)
+            //regex that identifies 'price>0' or 'price<49.99' pattern
+            //const reNumber = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?\d+\.?\d{2}?)/
+            const reNumber = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?[0-9]*\.?[0-9]+$)/
+            const resultNumber = reNumber.exec(k)
+            //regex for contains operator, e.g. 'description contains saftey recall'
+            const reText = /(?<left>\w+\s+)(?<operator>contains\s+)(?<right>.*)/ 
+            const resultText = reText.exec(k)
             if (resultDate){
               queryBuilder.where(resultDate.groups.left, resultDate.groups.operator.trim(), resultDate.groups.right)
-            } else if(result2){
-              queryBuilder.where(result2.groups.left, result2.groups.operator.trim(), result2.groups.right)
-            } else if(result3){
-              queryBuilder.where(result3.groups.left, 'ilike', `%${result3.groups.right.trim()}%`)
+            } else if(resultNumber){
+              console.log(resultNumber.groups.left, resultNumber.groups.operator, resultNumber.groups.right)
+              queryBuilder.where(resultNumber.groups.left, resultNumber.groups.operator.trim(), resultNumber.groups.right)
+            } else if(resultText){
+              queryBuilder.where(resultText.groups.left, 'ilike', `%${resultText.groups.right.trim()}%`)
             }else {   //<--- default when query param is used with '=', e.g. 'price=0'
               const val = req.query[k]
               queryBuilder.where(k, val.trim());
