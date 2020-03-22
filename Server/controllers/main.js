@@ -34,12 +34,20 @@
             const reText = /(?<left>\w+\s+)(?<operator>contains\s+)(?<right>.*)/ 
             const resultText = reText.exec(k)
             if (resultDate){
-              queryBuilder.where(resultDate.groups.left, resultDate.groups.operator.trim(), resultDate.groups.right)
+              left     = resultDate.groups.left
+              operator = resultDate.groups.operator.trim()
+              right    = resultDate.groups.right
+              queryBuilder.where(left, operator, right)
             } else if(resultNumber){
-              console.log(resultNumber.groups.left, resultNumber.groups.operator, resultNumber.groups.right)
-              queryBuilder.where(resultNumber.groups.left, resultNumber.groups.operator.trim(), resultNumber.groups.right)
+              left     = resultNumber.groups.left
+              operator = resultNumber.groups.operator.trim()
+              right    = resultNumber.groups.right
+              queryBuilder.where(left, operator, right)
             } else if(resultText){
-              queryBuilder.where(resultText.groups.left, 'ilike', `%${resultText.groups.right.trim()}%`)
+              left     = resultText.groups.left
+              operator = 'ilike'
+              right    = `%${resultText.groups.right.trim()}%`
+              queryBuilder.where(left, operator, right)
             }else {   //<--- default when query param is used with '=', e.g. 'price=0'
               const val = req.query[k]
               queryBuilder.where(k, val.trim());
