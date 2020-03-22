@@ -16,7 +16,7 @@ class SearchForm extends React.Component {
     submitSearchForm = e => {
         console.log("submitted search")
         e.preventDefault()
-        fetch(`http://localhost:3000/crud?${this.state.field}${this.state.operator}${this.state.value}`,{
+        fetch(`http://localhost:3000/crud?${this.state.field} ${this.state.operator} ${this.state.value}`,{
           method: 'get',
           headers: {
             'Content-Type': 'application/json'

@@ -4,7 +4,6 @@
     db.select('*').from('repair')
       .modify(function(queryBuilder){
         if (Object.keys(req.query).length > 0) {
-          console.log("am i inside? ")
           const keys = Object.keys(req.query)
           const k = keys[0]
           const re = /(?<left>\w+\s?<|>\s?)/ //<--- regex that identifies 'price<' type of pattern caused by gte; and lte; signs
@@ -16,11 +15,19 @@
             const right = req.query[k]
             queryBuilder.where(left, operator, right)
           } else {
-            const re2 = /(?<left>\w+\s?)(?<operator>>|<|=\s?)(?<right>\s*\d+)/ //<--- regex that matches gt; and lt; signs
+            const reDate = /(?<left>\w+\s?)(?<operator>>|<|\s?)(?<right>\s?\d{4}-\d{2}-\d{2})/
+            const resultDate = reDate.exec(k)
+            const re2 = /(?<left>\w+\s?)(?<operator>>|<|\s?)(?<right>\s?\d+.?\d{2}?)/ //<--- regex that matches gt; and lt; signs
             const result2 = re2.exec(k)
             const re3 = /(?<left>\w+\s)(?<operator>contains)(?<right>.*)/ //<--- regex for contains operator
             const result3 = re3.exec(k)
-            if(result2){
+            if (resultDate){
+              console.log('------------Date query')
+              console.log('resultDate.groups.right: ', resultDate.groups.right)
+              queryBuilder.where(resultDate.groups.left, resultDate.groups.operator.trim(), resultDate.groups.right)
+            } else if(result2){
+              console.log('------------3')
+              console.log('result2.groups.right: ', result2.groups.right)
               queryBuilder.where(result2.groups.left, result2.groups.operator.trim(), result2.groups.right)
             } else if(result3){
               console.log(result3.groups.right) 
