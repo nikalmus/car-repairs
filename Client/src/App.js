@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import DataTable from './Components/Tables/DataTable'
 import ModalForm from './Components/Modals/Modal'
+import SearchForm from './Components/Forms/SearchForm'
 import { CSVLink } from "react-csv"
 
 class App extends Component {
@@ -36,6 +37,10 @@ class App extends Component {
     this.setState({ items: newArray })
   }
 
+  filterState = (queryResults) => {
+    this.setState({ items: queryResults })
+  }
+
   deleteItemFromState = (id) => {
     const updatedItems = this.state.items.filter(item => item.id !== id)
     this.setState({ items: updatedItems })
@@ -52,6 +57,9 @@ class App extends Component {
           <Col>
             <h1 style={{margin: "20px 0"}}>Car Repairs</h1>
           </Col>
+        </Row>
+        <Row>
+          <SearchForm items={this.state.items} filterState={this.filterState}/>
         </Row>
         <Row>
           <Col>
