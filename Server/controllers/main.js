@@ -27,7 +27,6 @@
             const reDate = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?\d{4}-\d{2}-\d{2})/
             const resultDate = reDate.exec(k)
             //regex that identifies 'price>0' or 'price<49.99' pattern
-            //const reNumber = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?\d+\.?\d{2}?)/
             const reNumber = /(?<left>\w+\s*)(?<operator>>|<|\s*)(?<right>\s?[0-9]*\.?[0-9]+$)/
             const resultNumber = reNumber.exec(k)
             //regex for contains operator, e.g. 'description contains saftey recall'
