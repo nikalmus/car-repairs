@@ -1,12 +1,11 @@
-import { Selector} from 'testcafe';
-import SearchForm from '../../src/Components/Forms/SearchForm';
+import { Selector, t} from 'testcafe';
 
 class SearchComponent {
     constructor() {
       this.fieldInput    = Selector('#field');
       this.operatorInput = Selector('#operator');
       this.valueInput    = Selector('#value');
-      this.searchButton  = Selector('#sarch-btn');
+      this.searchButton  = Selector('#search-btn');
     }
     search = (field, operator, value) => {
       return t
