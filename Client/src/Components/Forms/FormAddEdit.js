@@ -14,7 +14,7 @@ class AddEditForm extends React.Component {
 
   submitFormAdd = e => {
     e.preventDefault()
-    fetch('http://localhost:3000/crud', {
+    fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/crud`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ class AddEditForm extends React.Component {
 
   submitFormEdit = e => {
     e.preventDefault()
-    fetch('http://localhost:3000/crud', {
+    fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/crud`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json'

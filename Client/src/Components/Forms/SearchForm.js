@@ -16,7 +16,7 @@ class SearchForm extends React.Component {
     submitSearchForm = e => {
         console.log("submitted search")
         e.preventDefault()
-        fetch(`http://localhost:3000/crud?${this.state.field} ${this.state.operator} ${this.state.value}`,{
+        fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/crud?${this.state.field} ${this.state.operator} ${this.state.value}`,{
           method: 'get',
           headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,6 @@ class SearchForm extends React.Component {
 
     render(){
         return (
-
           <Form onSubmit={ this.submitSearchForm }>
             <FormGroup>
               <Label for="field">Field</Label>
@@ -64,7 +63,7 @@ class SearchForm extends React.Component {
                                  onChange={this.onChange} 
                                  value={this.state.value === null ? '' : this.state.value} />
             </FormGroup>
-            <Button>Search</Button>
+            <Button id="search-btn">Search</Button>
           </Form>        
         )
     }

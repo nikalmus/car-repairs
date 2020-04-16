@@ -11,7 +11,7 @@ class App extends Component {
   }
 
   getItems(){
-    fetch('http://localhost:3000/crud')
+    fetch(`http://localhost:${process.env.REACT_APP_SERVER_PORT}/crud`)
       .then(response => response.json())
       .then(items => this.setState({items}))
       .catch(err => console.log(err))
