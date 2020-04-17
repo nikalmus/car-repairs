@@ -11,25 +11,26 @@ fixture `Navigation`
   });
 
   test('Find specific row by index', async t => {
-    const promisedRow  = await singlePage.tableRowComponent.getRow(2)
-    const row          = await promisedRow.textContent
-    console.log(row)
-    const promisedCell = await singlePage.tableRowComponent.getCell(promisedRow, 2)
-    const cell         = await promisedCell.textContent
-    console.log(cell)
-    const promisedCellButtons = await singlePage.tableRowComponent.getCell(promisedRow, 3)
-    const buttonCell          = await promisedCellButtons.textContent
-    console.log(buttonCell)
-
-    // want to edit 'Performed power steering fluid flush'
+    const originalDescription = 'Performed power steering fluid flush'
     const editedDescription = 'Flushed power steering fluid'
-    //await t.click(page.rowItem.withExactText('foobar').find("button").withExactText('Delete'))
-    await t.click(promisedRow.find("button").withExactText('Edit'))
+    const key = '6'
+
+    const row = await singlePage.tableRowComponent.getRowByKey(key)
+    //const cell = await singlePage.tableRowComponent.getCell(row, 0)
+    //await t.expect(cell.textContent).eql(originalDescription)
     await t
+        .click(row.find("button").withExactText('Edit'))
         .setNativeDialogHandler(() => true)
         .click('#description')
+        .wait(2000).expect(2+2).eql(4)
         .pressKey('ctrl+a delete')
         .typeText(Selector('#description'), editedDescription)
+        .wait(2000).expect(2+2).eql(4)
         .click('#submit-btn')
-
+    
+    await t.eval(() => location.reload(true));    
+    const editedRow = await singlePage.tableRowComponent.getRowByKey(key)
+    const editedCell = await singlePage.tableRowComponent.getCell(editedRow, 0)
+    await t.expect(editedCell.textContent).eql(editedDescription)
+    await t.hover(editedRow.find("button").withExactText('Edit'))
   })
