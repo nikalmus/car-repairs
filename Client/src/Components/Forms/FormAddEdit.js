@@ -89,7 +89,7 @@ class AddEditForm extends React.Component {
           <Label for="date">Date</Label>
           <Input type="date" name="date" id="date" onChange={this.onChange} value={this.state.date === null ? '' : this.state.date}  />
         </FormGroup>
-        <Button>Submit</Button>
+        <Button id="submit-btn">Submit</Button>
       </Form>
     );
   }

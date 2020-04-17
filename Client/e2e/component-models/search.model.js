@@ -1,4 +1,4 @@
-import { Selector, t} from 'testcafe';
+import { Selector, t } from 'testcafe';
 
 class SearchComponent {
     constructor() {
