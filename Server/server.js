@@ -1,4 +1,6 @@
+require('dotenv').config()
 const express = require('express')
+const auth = require('./auth')
 
 // use process.env variables to keep private variables,
 // be sure to ignore the .env file in github
@@ -47,6 +49,7 @@ const corsOptions = {
   }
 }
 app.use(helmet())
+app.use(auth)
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(morgan('combined')) // use 'tiny' or 'combined'

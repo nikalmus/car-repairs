@@ -11,7 +11,7 @@ fixture `Navigation`
 
 
 
-test.skip('Get free repairs by price = 0', async t => {
+test('Get free repairs by price = 0', async t => {
     const field    = 'price'
     const operator = '='
     const value    = '0'
@@ -24,7 +24,7 @@ test.skip('Get free repairs by price = 0', async t => {
         .expect((Selector('#tbl-body').find('tr').count)).eql(2);
 });
 
-test.skip('Get free repairs where description contains recall', async t => {
+test('Get free repairs where description contains recall', async t => {
     const field    = 'description'
     const operator = 'contains'
     const value    = 'recall'
@@ -37,7 +37,7 @@ test.skip('Get free repairs where description contains recall', async t => {
         .expect((Selector('#tbl-body').find('tr').count)).eql(2);
 });
 
-test.skip('Get repairs that contain words air filter', async t => {
+test('Get repairs that contain words air filter', async t => {
     const field1    = 'description'
     const operator1 = 'contains'
     const value1    = 'air filter'
